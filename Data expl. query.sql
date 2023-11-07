@@ -6,6 +6,54 @@ ORDER BY 3,4
 --SELECT *
 --FROM PortofolioProject..CovidDeaths
 --ORDER BY 3,4
+SELECT 
+  EXTRACT(YEAR FROM order_timestamp) AS order_year,
+  EXTRACT(MONTH FROM order_timestamp) AS order_month,
+  COUNT(*) AS total_orders,
+  AVG(amount) AS average_order_amount,
+  SUM(amount) AS total_order_amount
+FROM `efood2023-remote.main_assessment.orders`
+GROUP BY order_year, order_month
+ORDER BY order_year, order_month;
+
+SELECT 
+  user_class_name,
+  COUNT(DISTINCT user_id) as unique_users,
+  SUM(CASE WHEN total_orders > 1 THEN 1 ELSE 0 END) as repeat_customers
+FROM (
+  SELECT 
+    user_id,
+    user_class_name,
+    COUNT(*) as total_orders
+  FROM `your_dataset.orders`
+  GROUP BY user_id, user_class_name
+)
+GROUP BY user_class_name;
+
+SELECT 
+  EXTRACT(HOUR FROM order_timestamp) AS order_hour,
+  COUNT(*) as total_orders,
+  AVG(amount) as avg_order_amount
+FROM `your_dataset.orders`
+GROUP BY order_hour
+ORDER BY order_hour;
+
+
+SELECT 
+  AVG(coupon_discount_amount) as avg_discount,
+  SUM(coupon_discount_amount) as total_discounts_given,
+  COUNT(*) as total_coupons_used
+FROM `your_dataset.orders`
+WHERE coupon_discount_amount > 0;
+
+
+SELECT 
+  EXTRACT(YEAR_MONTH FROM order_timestamp) AS order_year_month,
+  COUNT(*) AS total_orders,
+  SUM(amount) AS total_revenue
+FROM `your_dataset.orders`
+GROUP BY order_year_month
+ORDER BY order_year_month;
 
 --Select data for use
 
